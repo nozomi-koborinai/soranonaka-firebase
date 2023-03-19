@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "soranonaka-dev",
+    "dev": "soranonaka-dev",
+    "prod": "soranonaka-prod"
+  }
+}
