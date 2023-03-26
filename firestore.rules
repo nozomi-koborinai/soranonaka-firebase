@@ -1,8 +1,88 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if false;
+
+    function hasAuth() {
+      return request.auth.uid != null
+    }
+
+    function isOwner(uid) {
+      return hasAuth() && request.auth.uid == uid
+    }
+
+    match /Users/{uid} {
+      allow get: if isOwner(uid);
+      allow list: if false;
+      allow create: if false;
+      allow update: isOwner(uid);
+      allow delete: if false;
+
+      match /MyEmotionsPosts/{myEmotionsPostsId} {
+        // read
+        allow get: if isOwner(uid);
+        allow list: if isOwner(uid);
+
+        // write
+        allow create: if isOwner(uid);
+        allow update: false;
+        allow delete: if false;
+
+        match /MyPostEmotions/{MyPostEmotionsId} {
+          // read
+          allow get: if isOwner(uid);
+          allow list: if isOwner(uid);
+
+          // write
+          allow create: if isOwner(uid);
+          allow update: false;
+          allow delete: if false;
+        }
+      }
+    }
+
+    match /PublicEmotionsPosts/{publicEmotionsPostsId} {
+      // read
+      allow get: if hasAuth();
+      allow list: if hasAuth();
+
+      // write
+      allow create: if isOwner(request.resource.data.uid);
+      allow update: false;
+      allow delete: if false;
+
+      match /PublicPostEmotions/{publicPostEmotionsId} {
+        // read
+        allow get: if hasAuth();
+        allow list: if hasAuth();
+
+        // write
+        allow create: if isOwner(get(/databases/$(database)/documents/PublicEmotionsPosts/$(publicEmotionsPostsId)).data.uid);
+        allow update: false;
+        allow delete: if false;
+      }
+    }
+
+    match /PublicEmotions/{publicEmotionsId} {
+      // read
+      allow get: if false;
+      allow list: if false;
+
+      // write
+      allow create: if hasAuth();
+      allow update: false;
+      allow delete: if false;
+    }
+
+
+    match /ChatGPTPrompts/{chatGPTPromptsId} {
+      // read
+      allow get: if hasAuth();
+      allow list: if hasAuth();
+
+      // write
+      allow create: if false;
+      allow update: false;
+      allow delete: if false;
     }
   }
 }
