@@ -14,7 +14,7 @@ service cloud.firestore {
       allow get: if isOwner(uid);
       allow list: if false;
       allow create: if false;
-      allow update: isOwner(uid);
+      allow update: if isOwner(uid);
       allow delete: if false;
 
       match /MyEmotionsPosts/{myEmotionsPostsId} {
@@ -24,7 +24,7 @@ service cloud.firestore {
 
         // write
         allow create: if isOwner(uid);
-        allow update: false;
+        allow update: if false;
         allow delete: if false;
 
         match /MyPostEmotions/{MyPostEmotionsId} {
@@ -34,7 +34,7 @@ service cloud.firestore {
 
           // write
           allow create: if isOwner(uid);
-          allow update: false;
+          allow update: if false;
           allow delete: if false;
         }
       }
@@ -47,7 +47,7 @@ service cloud.firestore {
 
       // write
       allow create: if isOwner(request.resource.data.uid);
-      allow update: false;
+      allow update: if false;
       allow delete: if false;
 
       match /PublicPostEmotions/{publicPostEmotionsId} {
@@ -57,7 +57,7 @@ service cloud.firestore {
 
         // write
         allow create: if isOwner(get(/databases/$(database)/documents/PublicEmotionsPosts/$(publicEmotionsPostsId)).data.uid);
-        allow update: false;
+        allow update: if false;
         allow delete: if false;
       }
     }
@@ -69,7 +69,7 @@ service cloud.firestore {
 
       // write
       allow create: if hasAuth();
-      allow update: false;
+      allow update: if false;
       allow delete: if false;
     }
 
@@ -81,7 +81,7 @@ service cloud.firestore {
 
       // write
       allow create: if false;
-      allow update: false;
+      allow update: if false;
       allow delete: if false;
     }
   }
