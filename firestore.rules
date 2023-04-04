@@ -10,14 +10,14 @@ service cloud.firestore {
       return hasAuth() && request.auth.uid == uid
     }
 
-    match /Users/{uid} {
+    match /user/{uid} {
       allow get: if isOwner(uid);
       allow list: if false;
       allow create: if false;
       allow update: if isOwner(uid);
       allow delete: if false;
 
-      match /MyEmotionsPosts/{myEmotionsPostsId} {
+      match /emotionPost/{emotionPostId} {
         // read
         allow get: if isOwner(uid);
         allow list: if isOwner(uid);
@@ -27,7 +27,7 @@ service cloud.firestore {
         allow update: if false;
         allow delete: if false;
 
-        match /MyPostEmotions/{MyPostEmotionsId} {
+        match /emotion/{emotionId} {
           // read
           allow get: if isOwner(uid);
           allow list: if isOwner(uid);
@@ -40,7 +40,7 @@ service cloud.firestore {
       }
     }
 
-    match /PublicEmotionsPosts/{publicEmotionsPostsId} {
+    match /allEmotionPost/{allEmotionPostId} {
       // read
       allow get: if hasAuth();
       allow list: if hasAuth();
@@ -50,19 +50,19 @@ service cloud.firestore {
       allow update: if false;
       allow delete: if false;
 
-      match /PublicPostEmotions/{publicPostEmotionsId} {
+      match /emotion/{emotionId} {
         // read
         allow get: if hasAuth();
         allow list: if hasAuth();
 
         // write
-        allow create: if isOwner(get(/databases/$(database)/documents/PublicEmotionsPosts/$(publicEmotionsPostsId)).data.uid);
+        allow create: if isOwner(get(/databases/$(database)/documents/allEmotionPost/$(allEmotionPostId)).data.uid);
         allow update: if false;
         allow delete: if false;
       }
     }
 
-    match /PublicEmotions/{publicEmotionsId} {
+    match /allEmotion/{allEmotionId} {
       // read
       allow get: if false;
       allow list: if false;
@@ -74,7 +74,7 @@ service cloud.firestore {
     }
 
 
-    match /ChatGPTPrompts/{chatGPTPromptsId} {
+    match /chatgptPrompt/{chatgptPromptId} {
       // read
       allow get: if hasAuth();
       allow list: if hasAuth();
