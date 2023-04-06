@@ -2,9 +2,9 @@ import "reflect-metadata";
 import { Container } from "inversify/lib/container/container";
 import { Firestore } from "firebase-admin/firestore";
 import * as admin from "firebase-admin";
-import { User } from "../firestore-collections/users/entity/user";
-import { userConverter } from "../firestore-collections/users/userConverter";
-import { UsersRepository } from "../firestore-collections/users/usersRepository";
+import { User } from "../firestore-collection/user/entity/user";
+import { userConverter } from "../firestore-collection/user/userConverter";
+import { UserRepository } from "../firestore-collection/user/userRepository";
 
 /**
  * DI コンテナー
@@ -24,8 +24,8 @@ export const providers = {
   /**
    * User
    */
-  usersRef: Symbol.for(`usersRef`),
-  usersRepository: Symbol.for(`usersRepository`),
+  userRef: Symbol.for(`userRef`),
+  userRepository: Symbol.for(`userRepository`),
 };
 
 /**************************************************************************
@@ -49,10 +49,10 @@ container
  * User
  */
 container
-  .bind<FirebaseFirestore.CollectionReference<User>>(providers.usersRef)
+  .bind<FirebaseFirestore.CollectionReference<User>>(providers.userRef)
   .toDynamicValue((context) => {
     const db = context.container.get<Firestore>(providers.firestoreDb);
-    return db.collection(`Users`).withConverter<User>(userConverter);
+    return db.collection(`user`).withConverter<User>(userConverter);
   })
   .inSingletonScope();
-container.bind<UsersRepository>(providers.usersRepository).to(UsersRepository);
+container.bind<UserRepository>(providers.userRepository).to(UserRepository);

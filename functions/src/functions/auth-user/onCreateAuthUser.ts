@@ -1,9 +1,9 @@
 import "reflect-metadata";
 import * as functions from "firebase-functions";
 import { constants } from "../../configs/constants";
-import { User } from "../../firestore-collections/users/entity/user";
+import { User } from "../../firestore-collection/user/entity/user";
 import { container, providers } from "../../configs/dicon";
-import { UsersRepository } from "../../firestore-collections/users/usersRepository";
+import { UserRepository } from "../../firestore-collection/user/userRepository";
 
 // Firebase.Authenticationにユーザーがつくられた時
 export const onCreateAuthUser = functions
@@ -14,8 +14,8 @@ export const onCreateAuthUser = functions
       uid: user.uid,
     });
 
-    const usersRepository = container.get<UsersRepository>(
-      providers.usersRepository
+    const usersRepository = container.get<UserRepository>(
+      providers.userRepository
     );
     await usersRepository.add({ input: input });
     functions.logger.info(`ユーザーを追加しました: uid = ${input.uid}`);
