@@ -9,7 +9,7 @@ admin.initializeApp();
 process.env.TZ = constants.timezone;
 
 // デプロイする関数を一旦importする
-import { onCreateAuthUser } from "./functions/auth-users/onCreateAuthUser";
+import { onCreateAuthUser } from "./functions/auth-user/onCreateAuthUser";
 
 // デプロイする関数一覧
 export { onCreateAuthUser };

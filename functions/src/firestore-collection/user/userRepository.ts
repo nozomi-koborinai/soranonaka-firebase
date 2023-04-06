@@ -7,9 +7,9 @@ import * as dayjs from "dayjs";
 
 // ユーザーリポジトリ
 @injectable()
-export class UsersRepository {
+export class UserRepository {
   constructor(
-    @inject(new LazyServiceIdentifer(() => providers.usersRef))
+    @inject(new LazyServiceIdentifer(() => providers.userRef))
     private collectionRef: CollectionReference<User>
   ) {}
 
